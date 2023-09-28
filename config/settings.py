@@ -30,7 +30,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -83,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -95,7 +95,6 @@ DATABASES = {
         'PASSWORD': os.getenv('password')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -115,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -126,7 +124,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -152,21 +149,19 @@ REST_FRAMEWORK = {
     ]
 }
 
-
-
 CORS_ALLOWED_ORIGINS = [
     'https://localhost*',  # Замените на адрес вашего фронтенд-сервера ИЛИ для * для всех
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com", #  Замените на адрес вашего фронтенд-сервера
+    "https://read-and-write.example.com",  # Замените на адрес вашего фронтенд-сервера
     # и добавьте адрес бэкенд-сервера
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
