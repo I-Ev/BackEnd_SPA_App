@@ -6,14 +6,16 @@ from utils.utilites import NULLABLE
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(unique=True, verbose_name='Email')
 
-    first_name = models.CharField(max_length=50, verbose_name='Имя')
-    last_name = models.CharField(max_length=50, verbose_name='Фамилия')
-    phone = models.CharField(max_length=20, verbose_name='Телефон', **NULLABLE)
+    telegram_name = models.CharField(max_length=50, unique=True, verbose_name='телеграм аккаунт')
+    email = models.EmailField(unique=True, verbose_name='Email', **NULLABLE)
+    chat_id = models.IntegerField(default=0, verbose_name='ID чата', **NULLABLE)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "telegram_name"
     REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return f'User: {self.telegram_name}'
 
     class Meta:
         verbose_name = 'Пользователь'
