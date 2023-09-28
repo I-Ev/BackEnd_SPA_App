@@ -167,7 +167,7 @@ CELERY_TASK_TRACK_STARTED = True
 # Настройки для Celery
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
-        'task': 'users.tasks.check_active_clients',  # Путь к задаче
+        'task': 'habits.tasks.check_habits',  # Путь к задаче
         'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }
