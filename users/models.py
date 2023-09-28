@@ -10,6 +10,7 @@ class User(AbstractUser):
     telegram_name = models.CharField(max_length=50, unique=True, verbose_name='телеграм аккаунт')
     email = models.EmailField(unique=True, verbose_name='Email', **NULLABLE)
     chat_id = models.IntegerField(default=0, verbose_name='ID чата', **NULLABLE)
+    update_id = models.PositiveBigIntegerField(default=0, **NULLABLE, verbose_name='ID последнего сообщения')
 
     USERNAME_FIELD = "telegram_name"
     REQUIRED_FIELDS = []
