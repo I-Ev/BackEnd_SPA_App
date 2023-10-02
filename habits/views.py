@@ -1,48 +1,52 @@
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from django.shortcuts import get_object_or_404
 
 from habits.models import Habit
 from habits.paginators import MyHabitPaginator
 from habits.permissions import IsAuthor, ReadOnly
 from habits.serializers import HabitSerializer, HabitPublicListSerializer
 
-
-# Create your views here.
-class HabitViewSet(ModelViewSet):
+class CreateHabitAPIView(generics.CreateAPIView):
+    """Создает новую привычку"""
     queryset = Habit.objects.all()
-    authentication_classes = [TokenAuthentication]
     serializer_class = HabitSerializer
-    permission_classes = [IsAuthenticated, IsAuthor]
-
-    def list(self, request, *args, **kwargs):
-        self.pagination_class = MyHabitPaginator()
-        return super().list(request, *args, **kwargs)
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        habit = serializer.save()
+        habit.author = get_object_or_404(User, id=self.request.user.id)
+        habit.save()
 
-        #
-        # new_habit = serializer.save()
-        # print(f"DEBUG: User before setting author: {new_habit.author}")
-        # new_habit.author = self.request.user
-        # print(f"DEBUG: User after setting author: {new_habit.author}")
-        # new_habit.save()
+class RetrieveHabitAPIView(generics.RetrieveAPIView):
+    """Получает привычку по ID"""
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthor, IsAuthenticated]
+    lookup_field = 'id'
 
-        # """Вью сет для модели привычки"""
-        # queryset = Habit.objects.all()
-        # serializer_class = HabitSerializer
-        #
-        # def perform_create(self, serializer):
-        #     new_habit = serializer.save()
-        #     new_habit.author = self.request.user
-        #     new_habit.save()
-        #
-        #     # serializer.validated_data['author'] = self.request.user
-        #     # serializer.save()
+class UpdateHabitAPIView(generics.UpdateAPIView):
+    """Обновляет привычку по ID"""
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthor, IsAuthenticated]
+    lookup_field = 'id'
 
+class DestroyHabitAPIView(generics.DestroyAPIView):
+    """Удаляет привычку по ID"""
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthor, IsAuthenticated]
+    lookup_field = 'id'
 
+class ListHabitAPIView(generics.ListAPIView):
+    """Получает список привычек пользователя"""
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthor, IsAuthenticated]
+    pagination_class = MyHabitPaginator
+
+    def get_queryset(self):
+        return Habit.objects.filter(author=get_object_or_404(User, id=self.request.user.id))
 
 class PublicHabitsListAPIView(generics.ListAPIView):
     """Получает список публичных привычек"""
