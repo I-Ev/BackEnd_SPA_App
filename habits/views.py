@@ -6,6 +6,8 @@ from habits.models import Habit
 from habits.paginators import MyHabitPaginator
 from habits.permissions import IsAuthor, ReadOnly
 from habits.serializers import HabitSerializer, HabitPublicListSerializer
+from users.models import User
+
 
 class CreateHabitAPIView(generics.CreateAPIView):
     """Создает новую привычку"""
