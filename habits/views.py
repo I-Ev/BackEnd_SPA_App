@@ -25,21 +25,21 @@ class RetrieveHabitAPIView(generics.RetrieveAPIView):
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthor, IsAuthenticated]
-    lookup_field = 'id'
+    lookup_field = 'pk'
 
 class UpdateHabitAPIView(generics.UpdateAPIView):
     """Обновляет привычку по ID"""
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthor, IsAuthenticated]
-    lookup_field = 'id'
+    lookup_field = 'pk'
 
 class DestroyHabitAPIView(generics.DestroyAPIView):
     """Удаляет привычку по ID"""
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthor, IsAuthenticated]
-    lookup_field = 'id'
+    lookup_field = 'pk'
 
 class ListHabitAPIView(generics.ListAPIView):
     """Получает список привычек пользователя"""
@@ -55,3 +55,4 @@ class PublicHabitsListAPIView(generics.ListAPIView):
     queryset = Habit.objects.filter(is_public=True)
     serializer_class = HabitPublicListSerializer
     permission_classes = [ReadOnly]
+    pagination_class = MyHabitPaginator

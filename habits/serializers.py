@@ -15,7 +15,7 @@ class HabitSerializer(serializers.ModelSerializer):
                       AsscoiatedHabitValidators,
                       IsNiceValidators,
                       PeriodicityValidators
-        ]
+                      ]
 
 
 class HabitPublicListSerializer(serializers.ModelSerializer):
