@@ -6,6 +6,11 @@ services:
         environment:
             POSTGRES_PASSWORD: mysecretpassword
             PGDATA: /var/lib/postgresql/data/pgdata
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 10s
+            retries: 5
     redis:
         image: redis
     app:
@@ -14,7 +19,8 @@ services:
         ports:
             - "8000:8000"
         depends_on:
-            - db
+            - db:
+                condition: service_healthy
             - redis
         volumes:
             - .:/code
@@ -22,7 +28,8 @@ services:
         build: .
         command: celery -A config worker -l info
         depends_on:
-            - db
+            - db:
+                condition: service_healthy
             - redis
         volumes:
             - .:/code
@@ -30,7 +37,8 @@ services:
         build: .
         command: celery -A config beat -l info
         depends_on:
-            - db
+            - db:
+                condition: service_healthy
             - redis
         volumes:
             - .:/code
